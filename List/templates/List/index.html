@@ -1,0 +1,69 @@
+{% load static %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>View List</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'List/style.css'%}" />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <!-- top -->
+      <div class="row">
+        <div class="col-lg-6">
+          <h1>View Grocery List</h1>
+          <a href="/addItem">Add Item</a>
+        </div>
+        <div class="col-lg-6 float-right">
+          <form class="row" method="GET">
+            <div class="col-lg-8">
+              <!-- Date Filtering-->
+              <input type="date" class="form-control" name="filterDate" {% if filter %} value="{{filter}}"   {% endif %}/>
+            </div>
+            <div class="col-lg-4">
+              <input type="submit" class="btn btn-danger" value="filter" />
+            </div>
+        </form>
+        </div>
+      </div>
+      <!-- // top -->
+      <!-- Grocery Cards -->
+      <div class="row mt-4">
+        <!--- -->
+        <!-- Loop This -->
+        {%for item in items %}
+        <div class="col-lg-4" style="margin-bottom: 30px;">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{item.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  {{item.quantity}} 
+                </h6>
+                {% ifequal item.status "0" %}
+                <p class="text-success">PENDING</p>
+                {%endifequal%} {% ifequal item.status "1" %}
+                <p class="text-info">BOUGHT</p>
+                {%endifequal%} {% ifequal item.status "2" %}
+                <p class="text-danger">NOT AVAILABLE</p>
+                {%endifequal%}
+                <div class="row">
+                    <div class="col">
+                        <a href="{% url 'update-item' item.id %}">Update</a>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'delete-item' item.id %}">Delete</a>
+                    </div>
+                </div>
+                
+
+              </div>
+            </div>
+        </div>
+        {%endfor%}
+      </div>
+    </div>
+  </body>
+</html>
